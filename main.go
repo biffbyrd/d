@@ -14,26 +14,26 @@ func main() {
 	args := os.Args[1:]
 	command := strings.Join(args, "")
 
-	reg := regexp.MustCompile(`(\d+)\s*d\s*(\d+)(\s*\+\s*(\d+)\s*)?(x\s*(\d+))?`) // 2d6+3 x10
+	reg := regexp.MustCompile(`((\d+)\s*d\s*(\d+))?(\s*\+\s*(\d+)\s*)?(x\s*(\d+))?`) // 2d6+3 x10
 	parts := reg.FindStringSubmatch(command)
 
 	if len(parts) == 0 {
 		printHelpAndQuit()
 	}
 
-	sNum := parts[1]
-	sDie := parts[2]
-	sBon := parts[4]
-	sRep := parts[6]
+	sNum := parts[2]
+	sDie := parts[3]
+	sBon := parts[5]
+	sRep := parts[7]
 
 	iNum, err := strconv.Atoi(sNum)
 	if err != nil {
-		printHelpAndQuit()
+		iNum = 1
 	}
 
 	iDie, err := strconv.Atoi(sDie)
 	if err != nil {
-		printHelpAndQuit()
+		iDie = 20
 	}
 
 	iBon, err := strconv.Atoi(sBon)
@@ -51,8 +51,10 @@ func main() {
 }
 
 func printHelpAndQuit() {
-	fmt.Println(`Example usage: d 2d8+3 x4"`)
-	fmt.Println(`Minimal usage: d 1d6"`)
+	fmt.Println(`Example usage: d 2d8+3 x4`)
+	fmt.Println(`               d 1d6`)
+	fmt.Println(`               d +4`)
+	fmt.Println(`               d`)
 	os.Exit(1)
 }
 
